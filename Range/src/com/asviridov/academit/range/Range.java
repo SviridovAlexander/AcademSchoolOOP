@@ -33,74 +33,46 @@ public class Range {
         return number >= from && number <= to;
     }
 
-    public Range getIntersection(Range other) {
-        double intersectionStart = Math.max(this.from, other.from);
-        double intersectionEnd = Math.min(this.to, other.to);
+    public Range getIntersection(Range range) {
+        double intersectionFrom = Math.max(from, range.from);
+        double intersectionTo = Math.min(to, range.to);
 
-        if (intersectionStart > intersectionEnd || (intersectionStart == intersectionEnd)) {
-            // No intersection
+        if (intersectionFrom >= intersectionTo) {
             return null;
         }
 
-        if (intersectionStart == this.from && intersectionEnd == this.to) {
-            // The other range is completely contained within this range
-            return this;
-        }
-
-        if (intersectionStart == other.from && intersectionEnd == other.to) {
-            // This range is completely contained within the other range
-            return other;
-        }
-
-        // Intersection exists but is not the entire range
-        return new Range(intersectionStart, intersectionEnd);
+        return new Range(intersectionFrom, intersectionTo);
     }
 
-    public Range[] getUnion(Range other) {
-        if (this.to < other.from || other.to < this.from) {
-            // No overlap, return both ranges separately
-            return new Range[]{this, other};
+    public Range[] getUnion(Range range) {
+        if (to < range.from || range.to < from) {
+            return new Range[]{new Range(from,to), new Range(range.from,range.to)};
         }
 
-        int unionStart = (int) Math.min(this.from, other.from);
-        int unionEnd = (int) Math.max(this.to, other.to);
-
-        Range union = new Range(unionStart, unionEnd);
-        return new Range[]{union};
+        return new Range[]{new Range(Math.min(from, range.from), Math.max(to, range.to))};
     }
 
-    public Range[] getDifference(Range other) {
-        if (this.to < other.from || other.to < this.from) {
-            // No overlap, return this range as is
-            return new Range[]{this};
+    public Range[] getDifference(Range range) {
+        if (to <= range.from || range.to <= this.from) {
+            return new Range[]{new Range(from,to)};
         }
 
-        if (other.from <= this.from && other.to >= this.to) {
-            // The other range completely covers this range, return empty array
-            return new Range[]{};
+        if (range.from <= from && range.to >= to) {
+            return null;
         }
 
-        if (other.from <= this.from) {
-            if (other.to == this.from) {
-                return new Range[]{this};
-            }
-            // The other range overlaps the start of this range
-            Range difference = new Range(other.to, this.to);
-            return new Range[]{difference};
+        if (range.from <= from) {
+            return new Range[]{new Range(range.to, to)};
         }
 
-        if (other.to >= this.to) {
-            if (other.from == this.to) {
-                return new Range[]{this};
-            }
-            // The other range overlaps the end of this range
-            Range difference = new Range(this.from, other.from);
-            return new Range[]{difference};
+        if (range.to >= to) {
+            return new Range[]{new Range(from, range.from)};
         }
 
-        // The other range is within this range, return two separate pieces
-        Range difference1 = new Range(this.from, other.from);
-        Range difference2 = new Range(other.to, this.to);
-        return new Range[]{difference1, difference2};
+        return new Range[]{new Range(from, range.from), new Range(range.to, to)};
+    }
+
+    public String toString() {
+        return "(" + from + "; " + to + ")";
     }
 }
