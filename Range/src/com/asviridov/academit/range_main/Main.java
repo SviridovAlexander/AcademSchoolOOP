@@ -2,8 +2,7 @@ package com.asviridov.academit.range_main;
 
 import com.asviridov.academit.range.Range;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
@@ -27,22 +26,16 @@ public class Main {
         Range intersection = range2.getIntersection(range3);
         System.out.println("Intersection:");
 
-        System.out.println(
-                intersection != null ? List.of(intersection) : Collections.emptyList()
-        );
+        System.out.println(intersection != null ? intersection : "[]");
 
         Range[] union = range2.getUnion(range3);
         System.out.println("Union:");
 
-        System.out.println(
-                union != null ? List.of(union) : Collections.emptyList()
-        );
+        System.out.println(Arrays.toString(union));
 
         Range[] difference = range2.getDifference(range3);
         System.out.println("Difference:");
 
-        System.out.println(
-                difference != null ? List.of(difference) : Collections.emptyList()
-        );
+        System.out.println(Arrays.toString(difference));
     }
 }

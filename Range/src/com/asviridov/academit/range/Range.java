@@ -46,19 +46,19 @@ public class Range {
 
     public Range[] getUnion(Range range) {
         if (to < range.from || range.to < from) {
-            return new Range[]{new Range(from,to), new Range(range.from,range.to)};
+            return new Range[]{new Range(from, to), new Range(range.from, range.to)};
         }
 
         return new Range[]{new Range(Math.min(from, range.from), Math.max(to, range.to))};
     }
 
     public Range[] getDifference(Range range) {
-        if (to <= range.from || range.to <= this.from) {
-            return new Range[]{new Range(from,to)};
+        if (to <= range.from || range.to <= from) {
+            return new Range[]{new Range(from, to)};
         }
 
         if (range.from <= from && range.to >= to) {
-            return null;
+            return new Range[0];
         }
 
         if (range.from <= from) {
@@ -72,6 +72,7 @@ public class Range {
         return new Range[]{new Range(from, range.from), new Range(range.to, to)};
     }
 
+    @Override
     public String toString() {
         return "(" + from + "; " + to + ")";
     }
