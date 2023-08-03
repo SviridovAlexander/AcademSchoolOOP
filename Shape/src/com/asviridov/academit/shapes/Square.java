@@ -1,40 +1,45 @@
-package com.asviridov.academit.shape;
+package com.asviridov.academit.shapes;
 
 public class Square implements Shape {
-    private final double side;
+    private final double sideLength;
 
-    public Square(double side) {
-        this.side = side;
+    public Square(double sideLength) {
+        this.sideLength = sideLength;
+    }
+
+    public double getSideLength() {
+        return sideLength;
     }
 
     @Override
     public double getWidth() {
-        return side;
+        return sideLength;
     }
 
     @Override
     public double getHeight() {
-        return side;
+        return sideLength;
     }
 
     @Override
     public double getArea() {
-        return side * side;
+        return sideLength * sideLength;
     }
 
     @Override
     public double getPerimeter() {
-        return 4 * side;
+        return 4 * sideLength;
     }
 
     @Override
     public String toString() {
-        return "Square [side=" + side + "]";
+        return "Square [side = " + sideLength + "]";
     }
+
 
     @Override
     public int hashCode() {
-        return 37 + Double.hashCode(side);
+        return 37 + Double.hashCode(sideLength);
     }
 
     @Override
@@ -42,10 +47,12 @@ public class Square implements Shape {
         if (this == obj) {
             return true;
         }
+
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
+
         Square square = (Square) obj;
-        return square.side == side;
+        return square.sideLength == sideLength;
     }
 }

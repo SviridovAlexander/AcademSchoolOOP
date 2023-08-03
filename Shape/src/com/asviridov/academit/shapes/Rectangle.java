@@ -1,11 +1,11 @@
-package com.asviridov.academit.shape;
+package com.asviridov.academit.shapes;
 
 public class Rectangle implements Shape {
-    private final double length;
+    private final double height;
     private final double width;
 
-    public Rectangle(double length, double width) {
-        this.length = length;
+    public Rectangle(double height, double width) {
+        this.height = height;
         this.width = width;
     }
 
@@ -16,40 +16,44 @@ public class Rectangle implements Shape {
 
     @Override
     public double getHeight() {
-        return length;
+        return height;
     }
 
     @Override
     public double getArea() {
-        return length * width;
+        return height * width;
     }
 
     @Override
     public double getPerimeter() {
-        return 2 * (length + width);
+        return 2 * (height + width);
     }
 
     @Override
     public String toString() {
-        return "Rectangle [length=" + length + ", width=" + width + "]";
+        return "Rectangle [length = " + height + ", width = " + width + "]";
     }
 
     @Override
     public int hashCode() {
         final int prime = 37;
         int hash = 1;
-        hash = prime * hash + Double.hashCode(length);
+        hash = prime * hash + Double.hashCode(height);
         hash = prime * hash + Double.hashCode(width);
         return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null || getClass() != obj.getClass())
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
+        }
+
         Rectangle rectangle = (Rectangle) obj;
-        return rectangle.length == length && rectangle.width == width;
+        return rectangle.height == height && rectangle.width == width;
     }
 }

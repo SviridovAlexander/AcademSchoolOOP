@@ -1,4 +1,4 @@
-package com.asviridov.academit.shape;
+package com.asviridov.academit.shapes;
 
 public class Triangle implements Shape {
     private final double x1;
@@ -17,9 +17,32 @@ public class Triangle implements Shape {
         this.y3 = y3;
     }
 
+    public double getX1() {
+        return x1;
+    }
+
+    public double getY1() {
+        return y1;
+    }
+
+    public double getX2() {
+        return x2;
+    }
+
+    public double getY2() {
+        return y2;
+    }
+
+    public double getX3() {
+        return x3;
+    }
+
+    public double getY3() {
+        return y3;
+    }
+
     @Override
     public double getWidth() {
-
         return Math.max(x1, Math.max(x2, x3)) - Math.min(x1, Math.min(x2, x3));
     }
 
@@ -30,22 +53,20 @@ public class Triangle implements Shape {
 
     @Override
     public double getArea() {
-        double width = getWidth();
-        double height = getHeight();
-        return 0.5 * width * height;
+        return 0.5 * getWidth() * getHeight();
     }
 
     @Override
     public double getPerimeter() {
-        double side1 = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-        double side2 = Math.sqrt((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2));
-        double side3 = Math.sqrt((x1 - x3) * (x1 - x3) + (y1 - y3) * (y1 - y3));
-        return side1 + side2 + side3;
+        double side1Length = calculateSideLength(x1, y1, x2, y2);
+        double side2Length = calculateSideLength(x2, y2, x3, y3);
+        double side3Length = calculateSideLength(x3, y3, x1, y1);
+        return side1Length + side2Length + side3Length;
     }
 
     @Override
     public String toString() {
-        return "Triangle [x1=" + x1 + ", y1=" + y1 + ", x2=" + x2 + ", y2=" + y2 + ", x3=" + x3 + ", y3=" + y3 + "]";
+        return "Triangle [(" + x1 + "; " + y1 + "), (" + x2 + "; " + y2 + "), (" + x3 + "; " + y3 + ")]";
     }
 
     @Override
@@ -63,13 +84,21 @@ public class Triangle implements Shape {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null || getClass() != obj.getClass())
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
+        }
+
         Triangle triangle = (Triangle) obj;
-        return triangle.x1 == x1 && triangle.y1 == y1 &&
-                triangle.x2 == x2 && triangle.y2 == y2 &&
-                triangle.x3 == x3 && triangle.y3 == y3;
+        return triangle.x1 == x1 && triangle.y1 == y1
+                && triangle.x2 == x2 && triangle.y2 == y2
+                && triangle.x3 == x3 && triangle.y3 == y3;
+    }
+
+    private double calculateSideLength(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 }

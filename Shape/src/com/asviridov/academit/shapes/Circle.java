@@ -1,10 +1,14 @@
-package com.asviridov.academit.shape;
+package com.asviridov.academit.shapes;
 
 public class Circle implements Shape {
     private final double radius;
 
     public Circle(double radius) {
         this.radius = radius;
+    }
+
+    public double getRadius() {
+        return radius;
     }
 
     @Override
@@ -29,7 +33,7 @@ public class Circle implements Shape {
 
     @Override
     public String toString() {
-        return "Circle [radius=" + radius + "]";
+        return "Circle [radius = " + radius + "]";
     }
 
     @Override
@@ -39,10 +43,14 @@ public class Circle implements Shape {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null || getClass() != obj.getClass())
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
+        }
+
         Circle circle = (Circle) obj;
         return circle.radius == radius;
     }
