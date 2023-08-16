@@ -1,5 +1,7 @@
 package com.asviridov.academit.shapes_main;
 
+import com.asviridov.academit.comparators.ShapeAreaComparator;
+import com.asviridov.academit.comparators.ShapePerimeterComparator;
 import com.asviridov.academit.shapes.*;
 
 import java.util.Arrays;
@@ -17,36 +19,32 @@ public class Main {
                 new Rectangle(5, 8),
         };
 
-        for(Shape shape:shapes){
+        for (Shape shape : shapes) {
             printShapeInfo(shape);
         }
 
-        findShapeWithMaxArea(shapes);
-        findShapeWithSecondLargestPerimeter(shapes);
+        printShapeInfo(findShapeWithMaxArea(shapes));
+        printShapeInfo(findShapeWithSecondLargestPerimeter(shapes));
     }
 
-    public static void findShapeWithMaxArea(Shape[] shapes) {
+    public static Shape findShapeWithMaxArea(Shape[] shapes) {
         if (shapes.length == 0) {
             System.out.println("No shapes to find maximum area.");
-            return;
+            return null;
         }
 
         Arrays.sort(shapes, new ShapeAreaComparator());
-        Shape maxAreaShape = shapes[shapes.length - 1];
-        System.out.println("Shape with maximum area:");
-        printShapeInfo(maxAreaShape);
+        return shapes[shapes.length - 1];
     }
 
-    public static void findShapeWithSecondLargestPerimeter(Shape[] shapes) {
-        if (shapes.length == 0) {
+    public static Shape findShapeWithSecondLargestPerimeter(Shape[] shapes) {
+        if (shapes.length <= 1) {
             System.out.println("No shapes to find second largest perimeter.");
-            return;
+            return null;
         }
 
         Arrays.sort(shapes, new ShapePerimeterComparator());
-        Shape secondLargestPerimeterShape = shapes[shapes.length - 2];
-        System.out.println("Shape with second largest perimeter:");
-        printShapeInfo(secondLargestPerimeterShape);
+        return shapes[shapes.length - 2];
     }
 
     public static void printShapeInfo(Shape shape) {
@@ -57,5 +55,4 @@ public class Main {
         System.out.println("Perimeter: " + shape.getPerimeter());
         System.out.println();
     }
-
 }

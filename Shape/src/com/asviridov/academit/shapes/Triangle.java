@@ -53,7 +53,11 @@ public class Triangle implements Shape {
 
     @Override
     public double getArea() {
-        return 0.5 * getWidth() * getHeight();
+        double perimeterHalf = getPerimeter() / 2;
+        return Math.sqrt(perimeterHalf
+                * (perimeterHalf - calculateSideLength(x1, y1, x2, y2)
+                * (perimeterHalf - calculateSideLength(x2, y2, x3, y3)
+                * (perimeterHalf - calculateSideLength(x3, y3, x1, y1)))));
     }
 
     @Override
@@ -98,7 +102,7 @@ public class Triangle implements Shape {
                 && triangle.x3 == x3 && triangle.y3 == y3;
     }
 
-    private double calculateSideLength(double x1, double y1, double x2, double y2) {
+    private static double calculateSideLength(double x1, double y1, double x2, double y2) {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 }

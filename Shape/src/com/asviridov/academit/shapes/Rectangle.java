@@ -31,7 +31,7 @@ public class Rectangle implements Shape {
 
     @Override
     public String toString() {
-        return "Rectangle [length = " + height + ", width = " + width + "]";
+        return "Rectangle [height = " + height + ", width = " + width + "]";
     }
 
     @Override
