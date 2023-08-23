@@ -1,4 +1,4 @@
-package com.asviridov.academit.comparators;
+package com.asviridov.academit.shapes_comparators;
 
 import com.asviridov.academit.shapes.Shape;
 

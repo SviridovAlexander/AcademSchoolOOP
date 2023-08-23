@@ -1,7 +1,7 @@
 package com.asviridov.academit.shapes_main;
 
-import com.asviridov.academit.comparators.ShapeAreaComparator;
-import com.asviridov.academit.comparators.ShapePerimeterComparator;
+import com.asviridov.academit.shapes_comparators.ShapeAreaComparator;
+import com.asviridov.academit.shapes_comparators.ShapePerimeterComparator;
 import com.asviridov.academit.shapes.*;
 
 import java.util.Arrays;
@@ -23,13 +23,25 @@ public class Main {
             printShapeInfo(shape);
         }
 
-        printShapeInfo(findShapeWithMaxArea(shapes));
-        printShapeInfo(findShapeWithSecondLargestPerimeter(shapes));
+        System.out.println("Shape with the largest area:");
+
+        if (findShapeWithMaxArea(shapes) != null){
+            printShapeInfo(shapes[shapes.length - 1]);
+        } else {
+            System.out.println("No shapes to find maximum area.");
+        }
+
+        System.out.println("Shape with the second largest perimeter:");
+
+        if (findShapeWithSecondLargestPerimeter(shapes) != null){
+            printShapeInfo(shapes[shapes.length - 2]);
+        } else {
+            System.out.println("No shapes to find maximum area.");
+        }
     }
 
     public static Shape findShapeWithMaxArea(Shape[] shapes) {
         if (shapes.length == 0) {
-            System.out.println("No shapes to find maximum area.");
             return null;
         }
 
@@ -39,7 +51,6 @@ public class Main {
 
     public static Shape findShapeWithSecondLargestPerimeter(Shape[] shapes) {
         if (shapes.length <= 1) {
-            System.out.println("No shapes to find second largest perimeter.");
             return null;
         }
 
