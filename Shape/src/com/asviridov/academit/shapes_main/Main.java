@@ -25,22 +25,24 @@ public class Main {
 
         System.out.println("Shape with the largest area:");
 
-        if (findShapeWithMaxArea(shapes) != null){
-            printShapeInfo(shapes[shapes.length - 1]);
+        Shape maxAreaShape = getShapeWithMaxArea(shapes);
+        if (maxAreaShape != null) {
+            printShapeInfo(maxAreaShape);
         } else {
             System.out.println("No shapes to find maximum area.");
         }
 
         System.out.println("Shape with the second largest perimeter:");
 
-        if (findShapeWithSecondLargestPerimeter(shapes) != null){
-            printShapeInfo(shapes[shapes.length - 2]);
+        Shape secondLargestPerimeterShape = getShapeWithSecondLargestPerimeter(shapes);
+        if (secondLargestPerimeterShape != null) {
+            printShapeInfo(secondLargestPerimeterShape);
         } else {
-            System.out.println("No shapes to find maximum area.");
+            System.out.println("No shapes to find second largest perimeter.");
         }
     }
 
-    public static Shape findShapeWithMaxArea(Shape[] shapes) {
+    public static Shape getShapeWithMaxArea(Shape[] shapes) {
         if (shapes.length == 0) {
             return null;
         }
@@ -49,7 +51,7 @@ public class Main {
         return shapes[shapes.length - 1];
     }
 
-    public static Shape findShapeWithSecondLargestPerimeter(Shape[] shapes) {
+    public static Shape getShapeWithSecondLargestPerimeter(Shape[] shapes) {
         if (shapes.length <= 1) {
             return null;
         }
