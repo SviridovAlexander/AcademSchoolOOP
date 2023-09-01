@@ -7,7 +7,7 @@ public class Vector {
 
     public Vector(int dimension) {
         if (dimension <= 0) {
-            throw new IllegalArgumentException("Vector dimension must be greater than 0. " + "Current value: " + dimension);
+            throw new IllegalArgumentException("Vector dimension must be greater than 0. Current value: " + dimension);
         }
 
         components = new double[dimension];
@@ -19,7 +19,7 @@ public class Vector {
 
     public Vector(double[] values) {
         if (values.length == 0) {
-            throw new IllegalArgumentException("Vector dimension must be greater than 0. " + "Current value: " + values.length);
+            throw new IllegalArgumentException("Vector dimension must be greater than 0. Current value: " + values.length);
         }
 
         components = Arrays.copyOf(values, values.length);
@@ -27,11 +27,10 @@ public class Vector {
 
     public Vector(int dimension, double[] values) {
         if (dimension <= 0) {
-            throw new IllegalArgumentException("Vector dimension must be greater than 0. " + "Current value: " + dimension);
+            throw new IllegalArgumentException("Vector dimension must be greater than 0. Current value: " + dimension);
         }
 
-        components = new double[dimension];
-        System.arraycopy(values, 0, components, 0, Math.min(dimension, values.length));
+        components = Arrays.copyOf(values, dimension);
     }
 
     public int getSize() {
@@ -57,29 +56,27 @@ public class Vector {
     }
 
     public void add(Vector vector) {
-        int newLength = Math.max(components.length, vector.components.length);
-        double[] result = new double[newLength];
+        int maxLength = Math.max(components.length, vector.components.length);
 
-        for (int i = 0; i < newLength; i++) {
-            double component1 = (i < components.length) ? components[i] : 0;
-            double component2 = (i < vector.components.length) ? vector.components[i] : 0;
-            result[i] = component1 + component2;
+        if (maxLength != components.length) {
+            components = Arrays.copyOf(components, maxLength);
         }
 
-        components = result;
+        for (int i = 0; i < vector.components.length; i++) {
+            components[i] += vector.components[i];
+        }
     }
 
     public void subtract(Vector vector) {
-        int newLength = Math.max(components.length, vector.components.length);
-        double[] result = new double[newLength];
+        int maxLength = Math.max(components.length, vector.components.length);
 
-        for (int i = 0; i < newLength; i++) {
-            double component1 = (i < components.length) ? components[i] : 0;
-            double component2 = (i < vector.components.length) ? vector.components[i] : 0;
-            result[i] = component1 - component2;
+        if (maxLength != components.length) {
+            components = Arrays.copyOf(components, maxLength);
         }
 
-        components = result;
+        for (int i = 0; i < vector.components.length; i++) {
+            components[i] -= vector.components[i];
+        }
     }
 
     public void multiply(double scalar) {
@@ -117,8 +114,7 @@ public class Vector {
         sb.append('{');
 
         for (double component : components) {
-            sb.append(component);
-            sb.append(", ");
+            sb.append(component).append(", ");
         }
 
         sb.setLength(sb.length() - 2);
@@ -128,24 +124,14 @@ public class Vector {
     }
 
     public static Vector getSum(Vector vector1, Vector vector2) {
-        int maxSize = Math.max(vector1.components.length, vector2.components.length);
-
-        Vector result = new Vector(maxSize);
-
-        result.add(vector1);
+        Vector result = new Vector(vector1);
         result.add(vector2);
-
         return result;
     }
 
     public static Vector getDifference(Vector vector1, Vector vector2) {
-        int maxSize = Math.max(vector1.components.length, vector2.components.length);
-
-        Vector result = new Vector(maxSize);
-
-        result.add(vector1);
+        Vector result = new Vector(vector1);
         result.subtract(vector2);
-
         return result;
     }
 
