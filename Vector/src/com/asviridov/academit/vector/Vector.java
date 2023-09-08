@@ -5,12 +5,12 @@ import java.util.Arrays;
 public class Vector {
     private double[] components;
 
-    public Vector(int dimension) {
-        if (dimension <= 0) {
-            throw new IllegalArgumentException("Vector dimension must be greater than 0. Current value: " + dimension);
+    public Vector(int size) {
+        if (size <= 0) {
+            throw new IllegalArgumentException("Vector size must be greater than 0. Current value: " + size);
         }
 
-        components = new double[dimension];
+        components = new double[size];
     }
 
     public Vector(Vector vector) {
@@ -19,18 +19,18 @@ public class Vector {
 
     public Vector(double[] values) {
         if (values.length == 0) {
-            throw new IllegalArgumentException("Vector dimension must be greater than 0. Current value: " + values.length);
+            throw new IllegalArgumentException("Vector size must be greater than 0. Current value: " + values.length);
         }
 
         components = Arrays.copyOf(values, values.length);
     }
 
-    public Vector(int dimension, double[] values) {
-        if (dimension <= 0) {
-            throw new IllegalArgumentException("Vector dimension must be greater than 0. Current value: " + dimension);
+    public Vector(int size, double[] values) {
+        if (size <= 0) {
+            throw new IllegalArgumentException("Vector size must be greater than 0. Current value: " + size);
         }
 
-        components = Arrays.copyOf(values, dimension);
+        components = Arrays.copyOf(values, size);
     }
 
     public int getSize() {
@@ -56,10 +56,8 @@ public class Vector {
     }
 
     public void add(Vector vector) {
-        int maxLength = Math.max(components.length, vector.components.length);
-
-        if (maxLength != components.length) {
-            components = Arrays.copyOf(components, maxLength);
+        if (Math.max(components.length, vector.components.length) != components.length) {
+            components = Arrays.copyOf(components, Math.max(components.length, vector.components.length));
         }
 
         for (int i = 0; i < vector.components.length; i++) {
@@ -68,10 +66,8 @@ public class Vector {
     }
 
     public void subtract(Vector vector) {
-        int maxLength = Math.max(components.length, vector.components.length);
-
-        if (maxLength != components.length) {
-            components = Arrays.copyOf(components, maxLength);
+        if (Math.max(components.length, vector.components.length) != components.length) {
+            components = Arrays.copyOf(components, Math.max(components.length, vector.components.length));
         }
 
         for (int i = 0; i < vector.components.length; i++) {
