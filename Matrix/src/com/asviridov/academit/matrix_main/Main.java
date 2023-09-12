@@ -5,40 +5,40 @@ import com.asviridov.academit.vector.Vector;
 
 public class Main {
     public static void main(String[] args) {
-        Matrix m1 = new Matrix(new double[][]{{1, 2, 3}, {4, 5, 6}});
-        Matrix m2 = new Matrix(new double[][]{{7, 8}, {9, 10}, {11, 12}});
-        Vector v1 = new Vector(new double[]{2, 7, 4});
-        Matrix m3 = new Matrix(new Vector[]{v1, v1});
-        Matrix mForDeterminantTest = new Matrix(new double[][]{{1, 2, 4, 5}, {3, 44, 1, -4}, {0, 4, -3, 8}, {5, 6, 5, 3}});
+        Matrix matrix1 = new Matrix(new double[][]{{1, 2, 3}, {4, 5, 6}});
+        Matrix matrix2 = new Matrix(new double[][]{{7, 8}, {9, 10}, {11, 12}});
+        Vector vector1 = new Vector(new double[]{2, 7, 4});
+        Matrix matrix3 = new Matrix(new Vector[]{vector1, vector1});
+        Matrix matrixForDeterminantTest = new Matrix(new double[][]{{1, 2, 4, 5}, {3, 44, 1, -4}, {0, 4, -3, 8}, {5, 6, 5, 3}});
 
-        System.out.println("m1:\n" + m1);
-        System.out.println("m2:\n" + m2);
-        System.out.println("m3:\n" + m3);
+        System.out.println("matrix1:" + System.lineSeparator() + matrix1);
+        System.out.println("matrix2:" + System.lineSeparator() + matrix2);
+        System.out.println("m3:" + System.lineSeparator() + matrix3);
 
-        System.out.println("m1 transposed:\n" + m1.transpose());
+        matrix1.transpose();
+        System.out.println("matrix1 transposed:" + System.lineSeparator() + matrix1);
 
-        m1.multiply(2);
-        System.out.println("m1 after multiplication:\n" + m1);
+        matrix1.multiply(2);
+        System.out.println("matrix1 after multiplication:" + System.lineSeparator() + matrix1);
 
-        System.out.println("Determinant of mForDeterminantTest: " + mForDeterminantTest.determinant());
+        System.out.println("Determinant of matrixForDeterminantTest: " + matrixForDeterminantTest.getDeterminant());
 
-        m1.matrixVectorMultiply(v1);
-        System.out.println("m1 after matrix-vector multiplication:\n" + m1);
+        System.out.println("matrix3 after matrix-vector multiplication:" + System.lineSeparator() + matrix3.multiplyByVector(vector1));
 
-        m3.matrixVectorMultiply(v1);
-        m1.add(m3);
-        System.out.println("m1 after addition with m3:\n" + m1);
+        matrix3.multiplyByVector(vector1);
+        matrix1.add(matrix2);
+        System.out.println("matrix1 after addition with matrix2:" + System.lineSeparator() + matrix1);
 
-        m3.subtract(m1);
-        System.out.println("m3 after subtraction of m1:\n" + m3);
+        matrix2.subtract(matrix1);
+        System.out.println("matrix2 after subtraction of matrix1:" + System.lineSeparator() + matrix3);
 
-        Matrix m4 = Matrix.add(m1, m3);
-        System.out.println("m4 = m1 + m3:\n" + m4);
+        Matrix matrix4 = Matrix.getSum(matrix1, matrix2);
+        System.out.println("matrix4 = matrix1 + matrix2:" + System.lineSeparator() + matrix4);
 
-        Matrix m5 = Matrix.subtract(m2, m2);
-        System.out.println("m5 = m2 - m2:\n" + m5);
+        Matrix matrix5 = Matrix.getDifference(matrix2, matrix2);
+        System.out.println("matrix5 = matrix2 - matrix2:" + System.lineSeparator() + matrix5);
 
-        Matrix m6 = Matrix.multiply(m2, m3);
-        System.out.println("m6 = m2 * m3:\n" + m6);
+        Matrix matrix6 = Matrix.getMatrixMultiplication(matrix2, matrix3);
+        System.out.println("matrix6 = matrix2 * matrix3:" + System.lineSeparator() + matrix6);
     }
 }
