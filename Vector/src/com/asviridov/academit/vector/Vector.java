@@ -56,8 +56,8 @@ public class Vector {
     }
 
     public void add(Vector vector) {
-        if (Math.max(components.length, vector.components.length) != components.length) {
-            components = Arrays.copyOf(components, Math.max(components.length, vector.components.length));
+        if (components.length < vector.components.length) {
+            components = Arrays.copyOf(components, vector.components.length);
         }
 
         for (int i = 0; i < vector.components.length; i++) {
@@ -66,8 +66,8 @@ public class Vector {
     }
 
     public void subtract(Vector vector) {
-        if (Math.max(components.length, vector.components.length) != components.length) {
-            components = Arrays.copyOf(components, Math.max(components.length, vector.components.length));
+        if (components.length < vector.components.length) {
+            components = Arrays.copyOf(components, vector.components.length);
         }
 
         for (int i = 0; i < vector.components.length; i++) {
