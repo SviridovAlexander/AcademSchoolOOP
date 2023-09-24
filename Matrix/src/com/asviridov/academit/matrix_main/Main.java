@@ -38,7 +38,7 @@ public class Main {
         Matrix matrix5 = Matrix.getDifference(matrix2, matrix2);
         System.out.println("matrix5 = matrix2 - matrix2:" + System.lineSeparator() + matrix5);
 
-        Matrix matrix6 = Matrix.getMatrixMultiplication(matrix2, matrix3);
+        Matrix matrix6 = Matrix.getMatrixesProduct(matrix2, matrix3);
         System.out.println("matrix6 = matrix2 * matrix3:" + System.lineSeparator() + matrix6);
     }
 }
