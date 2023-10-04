@@ -9,17 +9,16 @@ import java.util.Arrays;
 
 public class ArrayListHome {
     public static ArrayList<String> getLinesFromFile(String fileName) throws IOException {
-        ArrayList<String> lines = new ArrayList<>();
-
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            ArrayList<String> lines = new ArrayList<>();
             String line;
 
             while ((line = reader.readLine()) != null) {
                 lines.add(line);
             }
-        }
 
-        return lines;
+            return lines;
+        }
     }
 
     public static void removeEvenNumbers(ArrayList<Integer> numbers) {
@@ -63,8 +62,8 @@ public class ArrayListHome {
         System.out.println("List after removing - " + numbers);
 
         ArrayList<Integer> originalList = new ArrayList<>(Arrays.asList(1, 5, 2, 1, 3, 5));
-        System.out.println("Task 3: Unique list. List before changes - " + originalList);
-        ArrayList<Integer> uniqueList = getListWithoutDuplicates(originalList);
-        System.out.println("List after changes - " + uniqueList);
+        System.out.println("Task 3: Unique list. Original list - " + originalList);
+        ArrayList<Integer> uniqueElementsList = getListWithoutDuplicates(originalList);
+        System.out.println("New list without duplicates - " + uniqueElementsList);
     }
 }
