@@ -2,16 +2,16 @@ package com.asviridov.academit.array_list;
 
 import java.util.*;
 
-public class ArrayList<T> implements List<T> {
+public class ArrayList<E> implements List<E> {
     private static final int DEFAULT_CAPACITY = 10;
 
-    private T[] elements;
+    private E[] elements;
     private int size;
     private int modCount;
 
     public ArrayList() {
         //noinspection unchecked
-        elements = (T[]) new Object[DEFAULT_CAPACITY];
+        elements = (E[]) new Object[DEFAULT_CAPACITY];
     }
 
     public ArrayList(int capacity) {
@@ -20,7 +20,7 @@ public class ArrayList<T> implements List<T> {
         }
 
         //noinspection unchecked
-        elements = (T[]) new Object[capacity];
+        elements = (E[]) new Object[capacity];
     }
 
     private void ensureCapacity(int minCapacity) {
@@ -35,10 +35,9 @@ public class ArrayList<T> implements List<T> {
         }
     }
 
-    private class MyArrayListIterator implements Iterator<T> {
+    private class ArrayListIterator implements Iterator<E> {
         private int currentIndex = -1;
         private final int expectedModCount = modCount;
-
 
         @Override
         public boolean hasNext() {
@@ -46,7 +45,7 @@ public class ArrayList<T> implements List<T> {
         }
 
         @Override
-        public T next() {
+        public E next() {
             if (modCount != expectedModCount) {
                 throw new ConcurrentModificationException("Collection were modified during iteration.");
             }
@@ -77,8 +76,8 @@ public class ArrayList<T> implements List<T> {
     }
 
     @Override
-    public Iterator<T> iterator() {
-        return new MyArrayListIterator();
+    public Iterator<E> iterator() {
+        return new ArrayListIterator();
     }
 
     @Override
@@ -86,14 +85,14 @@ public class ArrayList<T> implements List<T> {
         return Arrays.copyOf(elements, size);
     }
 
-    @SuppressWarnings("SuspiciousSystemArraycopy")
     @Override
-    public <T1> T1[] toArray(T1[] a) {
+    public <T> T[] toArray(T[] a) {
         if (a.length < size) {
             //noinspection unchecked
-            return (T1[]) Arrays.copyOf(elements, size, a.getClass());
+            return (T[]) Arrays.copyOf(elements, size, a.getClass());
         }
 
+        //noinspection SuspiciousSystemArraycopy
         System.arraycopy(elements, 0, a, 0, size);
 
         if (a.length > size) {
@@ -104,7 +103,7 @@ public class ArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean add(T element) {
+    public boolean add(E element) {
         add(size, element);
 
         return true;
@@ -135,12 +134,12 @@ public class ArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean addAll(Collection<? extends T> c) {
+    public boolean addAll(Collection<? extends E> c) {
         return addAll(size, c);
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends T> c) {
+    public boolean addAll(int index, Collection<? extends E> c) {
         checkIndexForAdd(index);
 
         if (c.size() == 0) {
@@ -153,7 +152,7 @@ public class ArrayList<T> implements List<T> {
 
         int i = index;
 
-        for (T element : c) {
+        for (E element : c) {
             elements[i] = element;
             i++;
         }
@@ -166,15 +165,16 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public boolean removeAll(Collection<?> c) {
+        if (c.isEmpty()) {
+            return false;
+        }
+
         boolean isRemoved = false;
 
-        for (int i = 0; i < size; i++) {
+        for (int i = size - 1; i >= 0; i--) {
             if (c.contains(elements[i])) {
                 remove(i);
-
                 isRemoved = true;
-
-                i--;
             }
         }
 
@@ -185,13 +185,10 @@ public class ArrayList<T> implements List<T> {
     public boolean retainAll(Collection<?> c) {
         boolean isRemoved = false;
 
-        for (int i = 0; i < size; i++) {
+        for (int i = size - 1; i >= 0; i--) {
             if (!c.contains(elements[i])) {
                 remove(i);
-
                 isRemoved = true;
-
-                i--;
             }
         }
 
@@ -200,38 +197,40 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public void clear() {
-        for (int i = 0; i < size; ++i) {
-            elements[i] = null;
+        if (isEmpty()) {
+            return;
         }
 
+        Arrays.fill(elements, 0, size, null);
+
         size = 0;
-        ++modCount;
+        modCount++;
     }
 
     @Override
-    public T get(int index) {
+    public E get(int index) {
         checkIndex(index);
 
         return elements[index];
     }
 
     @Override
-    public T set(int index, T element) {
+    public E set(int index, E element) {
         checkIndex(index);
 
-        T oldValue = elements[index];
+        E oldElement = elements[index];
 
         elements[index] = element;
 
-        return oldValue;
+        return oldElement;
     }
 
     @Override
-    public void add(int index, T element) {
+    public void add(int index, E element) {
         checkIndexForAdd(index);
 
         if (size >= elements.length) {
-            ensureCapacity(elements.length * 2);
+            increaseCapacity();
         }
 
         if (index != size) {
@@ -245,10 +244,10 @@ public class ArrayList<T> implements List<T> {
     }
 
     @Override
-    public T remove(int index) {
+    public E remove(int index) {
         checkIndex(index);
 
-        T removedElement = elements[index];
+        E removedElement = elements[index];
 
         if (index < size - 1) {
             System.arraycopy(elements, index + 1, elements, index, size - index - 1);
@@ -285,17 +284,17 @@ public class ArrayList<T> implements List<T> {
     }
 
     @Override
-    public ListIterator<T> listIterator() {
+    public ListIterator<E> listIterator() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public ListIterator<T> listIterator(int index) {
+    public ListIterator<E> listIterator(int index) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<T> subList(int fromIndex, int toIndex) {
+    public List<E> subList(int fromIndex, int toIndex) {
         throw new UnsupportedOperationException();
     }
 
@@ -307,7 +306,7 @@ public class ArrayList<T> implements List<T> {
     }
 
     private void checkIndexForAdd(int index) {
-        if (index > size || index < 0) {
+        if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("The index is less than 0 or greater than the current ArrayList size - " + size +
                     ". Given index: " + index);
         }
@@ -321,15 +320,21 @@ public class ArrayList<T> implements List<T> {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append("[");
+        sb.append('[');
 
         for (int i = 0; i < size; ++i) {
             sb.append(elements[i]).append(", ");
         }
 
         sb.setLength(sb.length() - 2);
-        sb.append("]");
+        sb.append(']');
 
         return sb.toString();
+    }
+
+    private void increaseCapacity() {
+        int capacity = (elements.length == 0) ? 1 : elements.length * 2;
+
+        elements = Arrays.copyOf(elements, capacity);
     }
 }
