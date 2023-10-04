@@ -12,33 +12,45 @@ public class Main {
         Matrix matrixForDeterminantTest = new Matrix(new double[][]{{1, 2, 4, 5}, {3, 44, 1, -4}, {0, 4, -3, 8}, {5, 6, 5, 3}});
 
         System.out.println("matrix1:" + System.lineSeparator() + matrix1);
+        System.out.println();
         System.out.println("matrix2:" + System.lineSeparator() + matrix2);
-        System.out.println("m3:" + System.lineSeparator() + matrix3);
+        System.out.println();
+        System.out.println("matrix3:" + System.lineSeparator() + matrix3);
+        System.out.println();
 
         matrix1.transpose();
         System.out.println("matrix1 transposed:" + System.lineSeparator() + matrix1);
+        System.out.println();
 
-        matrix1.multiply(2);
+        matrix1.multiplyByScalar(2);
         System.out.println("matrix1 after multiplication:" + System.lineSeparator() + matrix1);
+        System.out.println();
 
         System.out.println("Determinant of matrixForDeterminantTest: " + matrixForDeterminantTest.getDeterminant());
+        System.out.println();
 
         System.out.println("matrix3 after matrix-vector multiplication:" + System.lineSeparator() + matrix3.multiplyByVector(vector1));
+        System.out.println();
 
         matrix3.multiplyByVector(vector1);
         matrix1.add(matrix2);
         System.out.println("matrix1 after addition with matrix2:" + System.lineSeparator() + matrix1);
+        System.out.println();
 
         matrix2.subtract(matrix1);
         System.out.println("matrix2 after subtraction of matrix1:" + System.lineSeparator() + matrix3);
+        System.out.println();
 
         Matrix matrix4 = Matrix.getSum(matrix1, matrix2);
         System.out.println("matrix4 = matrix1 + matrix2:" + System.lineSeparator() + matrix4);
+        System.out.println();
 
         Matrix matrix5 = Matrix.getDifference(matrix2, matrix2);
         System.out.println("matrix5 = matrix2 - matrix2:" + System.lineSeparator() + matrix5);
+        System.out.println();
 
-        Matrix matrix6 = Matrix.getMatrixesProduct(matrix2, matrix3);
+        Matrix matrix6 = Matrix.getProduct(matrix2, matrix3);
         System.out.println("matrix6 = matrix2 * matrix3:" + System.lineSeparator() + matrix6);
+        System.out.println();
     }
 }

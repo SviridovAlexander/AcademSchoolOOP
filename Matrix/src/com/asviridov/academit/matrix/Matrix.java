@@ -130,7 +130,7 @@ public class Matrix {
         rows = transposedRows;
     }
 
-    public void multiply(double scalar) {
+    public void multiplyByScalar(double scalar) {
         for (Vector row : rows) {
             row.multiply(scalar);
         }
@@ -168,11 +168,7 @@ public class Matrix {
         Matrix submatrix = new Matrix(rowsCount, columnsCount);
         int submatrixRowIndex = 0;
 
-        for (int i = 0; i < rows.length; i++) {
-            if (i == 0) {
-                continue;
-            }
-
+        for (int i = 1; i < rows.length; i++) {
             int submatrixColumnIndex = 0;
 
             for (int j = 0; j < getColumnsCount(); j++) {
@@ -221,7 +217,7 @@ public class Matrix {
     }
 
     public void add(Matrix matrix) {
-        checkMatrixDimensionEquality(this, matrix);
+        checkMatricesDimensionsEquality(this, matrix);
 
         for (int i = 0; i < rows.length; i++) {
             rows[i].add(matrix.rows[i]);
@@ -229,7 +225,7 @@ public class Matrix {
     }
 
     public void subtract(Matrix matrix) {
-        checkMatrixDimensionEquality(this, matrix);
+        checkMatricesDimensionsEquality(this, matrix);
 
         for (int i = 0; i < rows.length; i++) {
             rows[i].subtract(matrix.rows[i]);
@@ -237,7 +233,7 @@ public class Matrix {
     }
 
     public static Matrix getSum(Matrix matrix1, Matrix matrix2) {
-        checkMatrixDimensionEquality(matrix1, matrix2);
+        checkMatricesDimensionsEquality(matrix1, matrix2);
 
         Matrix result = new Matrix(matrix1);
         result.add(matrix2);
@@ -245,36 +241,36 @@ public class Matrix {
     }
 
     public static Matrix getDifference(Matrix matrix1, Matrix matrix2) {
-        checkMatrixDimensionEquality(matrix1, matrix2);
+        checkMatricesDimensionsEquality(matrix1, matrix2);
 
         Matrix result = new Matrix(matrix1);
         result.subtract(matrix2);
         return result;
     }
 
-    public static Matrix getMatrixesProduct(Matrix matrix1, Matrix matrix2) {
+    public static Matrix getProduct(Matrix matrix1, Matrix matrix2) {
         if (matrix1.getColumnsCount() != matrix2.rows.length) {
             throw new IllegalArgumentException("Matrix 1 columns count (" +
                     matrix1.getColumnsCount() + ") must match Matrix 2 rows count (" +
                     matrix2.rows.length + ")");
         }
 
-        Matrix result = new Matrix(matrix1.rows.length, matrix2.getColumnsCount());
+        Matrix product = new Matrix(matrix1.rows.length, matrix2.getColumnsCount());
 
         for (int i = 0; i < matrix1.rows.length; ++i) {
-            Vector rowProduct = new Vector(matrix2.getColumnsCount());
+            Vector productRow = new Vector(matrix2.getColumnsCount());
 
             for (int j = 0; j < matrix2.getColumnsCount(); ++j) {
-                rowProduct.setComponent(j, Vector.getDotProduct(matrix1.getRow(i), matrix2.getColumn(j)));
+                productRow.setComponent(j, Vector.getDotProduct(matrix1.rows[i], matrix2.getColumn(j)));
             }
 
-            result.setRow(i, rowProduct);
+            product.setRow(i, productRow);
         }
 
-        return result;
+        return product;
     }
 
-    private static void checkMatrixDimensionEquality(Matrix matrix1, Matrix matrix2) {
+    private static void checkMatricesDimensionsEquality(Matrix matrix1, Matrix matrix2) {
         if (matrix1.getColumnsCount() != matrix2.getColumnsCount() || matrix1.rows.length != matrix2.rows.length) {
             throw new IllegalArgumentException("Matrix dimensions must match for the operation. Matrix1: " +
                     matrix1.rows.length + "x" + matrix1.getColumnsCount() + ", Matrix2: " +
