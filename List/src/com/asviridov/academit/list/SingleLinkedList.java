@@ -1,9 +1,10 @@
 package com.asviridov.academit.list;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
-public class SingleLinkedList<T> {
-    private ListItem<T> head;
+public class SingleLinkedList<E> {
+    private ListItem<E> head;
     private int size;
 
     public int getSize() {
@@ -18,19 +19,18 @@ public class SingleLinkedList<T> {
 
     private void checkIndex(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("The index is less than 0 or greater than the current list size - " + size +
-                    ". Given index: " + index);
+            throw new IndexOutOfBoundsException("The index is out of valid range (0, " + size + "]. Given index: " + index);
         }
     }
 
-    public T getFirstValue() {
+    public E getFirst() {
         checkListNotEmpty();
 
-        return head.getData();
+        return head.getValue();
     }
 
-    private ListItem<T> getItemByIndex(int index) {
-        ListItem<T> item = head;
+    private ListItem<E> getItemByIndex(int index) {
+        ListItem<E> item = head;
 
         for (int i = 0; i < index; i++) {
             item = item.getNext();
@@ -39,101 +39,99 @@ public class SingleLinkedList<T> {
         return item;
     }
 
-    public T getValueAtIndex(int index) {
+    public E get(int index) {
         checkIndex(index);
 
-        ListItem<T> item = getItemByIndex(index);
-
-        return item.getData();
+        return getItemByIndex(index).getValue();
     }
 
-    public T setValueAtIndex(int index, T value) {
+    public E set(int index, E value) {
         checkIndex(index);
 
-        ListItem<T> item = getItemByIndex(index);
+        ListItem<E> item = getItemByIndex(index);
 
-        T oldValue = item.getData();
-        item.setData(value);
+        E oldValue = item.getValue();
+        item.setValue(value);
 
         return oldValue;
     }
 
-    public T deleteAtIndex(int index) {
+    public E deleteAtIndex(int index) {
         checkIndex(index);
 
         if (index == 0) {
-            return removeFirst();
+            return deleteFirst();
         }
 
-        ListItem<T> item = getItemByIndex(index - 1);
-        T deletedValue = item.getNext().getData();
+        ListItem<E> previousItem = getItemByIndex(index - 1);
+        E deletedValue = previousItem.getNext().getValue();
 
-        item.setNext(item.getNext().getNext());
+        previousItem.setNext(previousItem.getNext().getNext());
         size--;
 
         return deletedValue;
     }
 
-    public void insertAtBeginning(T value) {
-        ListItem<T> newItem = new ListItem<>(value);
-        newItem.setNext(head);
-        head = newItem;
+    public void insertFirst(E value) {
+        head = new ListItem<>(value, head);
         size++;
     }
 
-    public void insertAtIndex(int index, T value) {
-        checkIndex(index);
+    public void insertAtIndex(int index, E value) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("The index is out of valid range (0, " + size + "). Given index: " + index);
+        }
 
         if (index == 0) {
-            insertAtBeginning(value);
+            insertFirst(value);
             return;
         }
 
-        ListItem<T> newItem = new ListItem<>(value);
-        ListItem<T> previousItem = getItemByIndex(index - 1);
 
-        newItem.setNext(previousItem.getNext());
-        previousItem.setNext(newItem);
+        ListItem<E> previousItem = getItemByIndex(index - 1);
 
+        previousItem.setNext(new ListItem<>(value, previousItem.getNext()));
         size++;
     }
 
-    public boolean deleteByValue(T value) {
+    public boolean deleteByValue(E value) {
         if (size == 0) {
             return false;
         }
 
-        if (head.getData().equals(value)) {
-            removeFirst();
+        if (head.getValue().equals(value)) {
+            deleteFirst();
 
             return true;
         }
 
-        ListItem<T> item = head;
+        ListItem<E> previousItem = head;
+        ListItem<E> currentItem = head.getNext();
 
-        while (item.getNext() != null) {
-            if (item.getNext().getData().equals(value)) {
-                item.setNext(item.getNext().getNext());
+        while (currentItem != null) {
+            if (Objects.equals(currentItem.getValue(), value)) {
+                previousItem.setNext(currentItem.getNext());
                 size--;
 
                 return true;
             }
 
-            item = item.getNext();
+            previousItem = currentItem;
+            currentItem = currentItem.getNext();
         }
 
         return false;
     }
 
-    public T removeFirst() {
+    public E deleteFirst() {
         checkListNotEmpty();
 
-        T removedValue = head.getData();
+        E deletedValue = head.getValue();
 
         head = head.getNext();
         size--;
 
-        return removedValue;
+        return deletedValue;
     }
 
     public void reverse() {
@@ -141,12 +139,11 @@ public class SingleLinkedList<T> {
             return;
         }
 
-        ListItem<T> previousItem = null;
-        ListItem<T> currentItem = head;
-        ListItem<T> nextItem;
+        ListItem<E> previousItem = null;
+        ListItem<E> currentItem = head;
 
         while (currentItem != null) {
-            nextItem = currentItem.getNext();
+            ListItem<E> nextItem = currentItem.getNext();
             currentItem.setNext(previousItem);
             previousItem = currentItem;
             currentItem = nextItem;
@@ -155,37 +152,41 @@ public class SingleLinkedList<T> {
         head = previousItem;
     }
 
-    public SingleLinkedList<T> copy() {
-        SingleLinkedList<T> copyList = new SingleLinkedList<>();
+    public SingleLinkedList<E> copy() {
+        SingleLinkedList<E> listCopy = new SingleLinkedList<>();
 
         if (size == 0) {
-            return copyList;
+            return listCopy;
         }
 
-        copyList.head = new ListItem<>(head.getData());
-        copyList.size = size;
+        listCopy.head = new ListItem<>(head.getValue());
+        listCopy.size = size;
 
-        ListItem<T> currentItem = head;
-        ListItem<T> copyItem = copyList.head;
+        ListItem<E> currentItem = head.getNext();
+        ListItem<E> itemCopy = listCopy.head;
 
-        while (currentItem.getNext() != null) {
+        while (currentItem != null) {
+            itemCopy.setNext(new ListItem<>(currentItem.getValue()));
+            itemCopy = itemCopy.getNext();
             currentItem = currentItem.getNext();
-            copyItem.setNext(new ListItem<>(currentItem.getData()));
-            copyItem = copyItem.getNext();
         }
 
-        return copyList;
+        return listCopy;
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
+        if (size == 0) {
+            return "[]";
+        }
 
-        ListItem<T> item = head;
+        StringBuilder sb = new StringBuilder();
+        sb.append('[');
+
+        ListItem<E> item = head;
 
         while (item != null) {
-            sb.append(item.getData()).append(", ");
+            sb.append(item.getValue()).append(", ");
             item = item.getNext();
         }
 

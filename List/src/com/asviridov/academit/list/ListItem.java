@@ -1,26 +1,31 @@
 package com.asviridov.academit.list;
 
-class ListItem<T> {
-    private T data;
-    private ListItem<T> next;
+class ListItem<E> {
+    private E value;
+    private ListItem<E> next;
 
-    public ListItem(T data) {
-        this.data = data;
+    public ListItem(E value) {
+        this.value = value;
     }
 
-    public T getData() {
-        return data;
+    public ListItem(E value, ListItem<E> next) {
+        this.value = value;
+        this.next = next;
     }
 
-    public void setData(T data) {
-        this.data = data;
+    public E getValue() {
+        return value;
     }
 
-    public ListItem<T> getNext() {
+    public void setValue(E value) {
+        this.value = value;
+    }
+
+    public ListItem<E> getNext() {
         return next;
     }
 
-    public void setNext(ListItem<T> next) {
+    public void setNext(ListItem<E> next) {
         this.next = next;
     }
 }
