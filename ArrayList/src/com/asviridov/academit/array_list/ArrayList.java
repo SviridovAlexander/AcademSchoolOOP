@@ -114,7 +114,7 @@ public class ArrayList<E> implements List<E> {
         int index = indexOf(o);
 
         if (index != -1) {
-            remove(indexOf(o));
+            remove(index);
 
             return true;
         }
@@ -142,7 +142,7 @@ public class ArrayList<E> implements List<E> {
     public boolean addAll(int index, Collection<? extends E> c) {
         checkIndexForAdd(index);
 
-        if (c.size() == 0) {
+        if (c.isEmpty()) {
             return false;
         }
 
@@ -333,8 +333,12 @@ public class ArrayList<E> implements List<E> {
     }
 
     private void increaseCapacity() {
-        int capacity = (elements.length == 0) ? 1 : elements.length * 2;
+        if (elements.length == 0) {
+            //noinspection unchecked
+            elements = (E[]) new Object[DEFAULT_CAPACITY];
+            return;
+        }
 
-        elements = Arrays.copyOf(elements, capacity);
+        elements = Arrays.copyOf(elements, elements.length * 2);
     }
 }
