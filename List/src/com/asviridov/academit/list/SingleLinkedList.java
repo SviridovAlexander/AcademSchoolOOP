@@ -19,7 +19,8 @@ public class SingleLinkedList<E> {
 
     private void checkIndex(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("The index is out of valid range (0, " + size + "]. Given index: " + index);
+            throw new IndexOutOfBoundsException("The index must be greater than or equal to 0 and less than " + size
+                    + "Given index: " + index);
         }
     }
 
@@ -79,7 +80,8 @@ public class SingleLinkedList<E> {
 
     public void insertAtIndex(int index, E value) {
         if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("The index is out of valid range (0, " + size + "). Given index: " + index);
+            throw new IndexOutOfBoundsException("The index must be greater than or equal to 0 and less than or equal to " + size
+                    + "Given index: " + index);
         }
 
         if (index == 0) {
@@ -99,7 +101,7 @@ public class SingleLinkedList<E> {
             return false;
         }
 
-        if (head.getValue().equals(value)) {
+        if (Objects.equals(head.getValue(), value)) {
             deleteFirst();
 
             return true;
