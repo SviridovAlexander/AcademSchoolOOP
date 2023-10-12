@@ -5,13 +5,13 @@ import java.util.*;
 public class HashTable<E> implements Collection<E> {
     private static final int DEFAULT_CAPACITY = 10;
 
-    private final ArrayList<E>[] hashTable;
+    private final ArrayList<E>[] lists;
     private int size;
     private int modCount;
 
     public HashTable() {
         //noinspection unchecked
-        hashTable = (ArrayList<E>[]) new ArrayList[DEFAULT_CAPACITY];
+        lists = (ArrayList<E>[]) new ArrayList[DEFAULT_CAPACITY];
     }
 
     public HashTable(int capacity) {
@@ -20,7 +20,7 @@ public class HashTable<E> implements Collection<E> {
         }
 
         //noinspection unchecked
-        hashTable = new ArrayList[capacity];
+        lists = new ArrayList[capacity];
     }
 
     private int getIndex(Object o) {
@@ -28,18 +28,18 @@ public class HashTable<E> implements Collection<E> {
             return 0;
         }
 
-        return Math.abs(o.hashCode() % hashTable.length);
+        return Math.abs(o.hashCode() % lists.length);
     }
 
     private class HashTableIterator implements Iterator<E> {
-        private int currentIndex = -1;
-        private int currentListIndex = 0;
-        private int currentHashIndex = 0;
+        private int globalIndex = -1;
+        private int elementIndex;
+        private int listIndex;
         private final int expectedModCount = modCount;
 
         @Override
         public boolean hasNext() {
-            return currentIndex + 1 < size;
+            return globalIndex + 1 < size;
         }
 
         @Override
@@ -52,25 +52,25 @@ public class HashTable<E> implements Collection<E> {
                 throw new NoSuchElementException("No elements left");
             }
 
-            while (currentHashIndex < hashTable.length) {
-                if (hashTable[currentHashIndex] != null && currentListIndex < hashTable[currentHashIndex].size()) {
-                    E data = hashTable[currentHashIndex].get(currentListIndex);
+            while (listIndex < lists.length) {
+                if (lists[listIndex] == null || elementIndex >= lists[listIndex].size()) {
+                    listIndex++;
+                } else {
+                    E data = lists[listIndex].get(elementIndex);
 
-                    currentIndex++;
-                    currentListIndex++;
+                    globalIndex++;
+                    elementIndex++;
 
-                    if (currentListIndex == hashTable[currentHashIndex].size()) {
-                        currentHashIndex++;
-                        currentListIndex = 0;
+                    if (elementIndex == lists[listIndex].size()) {
+                        listIndex++;
+                        elementIndex = 0;
                     }
 
                     return data;
-                } else {
-                    currentHashIndex++;
                 }
             }
 
-            return null;
+            throw new NoSuchElementException("No elements left");
         }
     }
 
@@ -88,7 +88,7 @@ public class HashTable<E> implements Collection<E> {
     public boolean contains(Object o) {
         int index = getIndex(o);
 
-        return hashTable[index] != null && hashTable[index].contains(o);
+        return lists[index] != null && lists[index].contains(o);
     }
 
     @Override
@@ -131,21 +131,21 @@ public class HashTable<E> implements Collection<E> {
     public boolean add(E element) {
         int index = getIndex(element);
 
-        if (hashTable[index] == null) {
-            hashTable[index] = new ArrayList<>();
+        if (lists[index] == null) {
+            lists[index] = new ArrayList<>();
         }
 
         size++;
         modCount++;
 
-        return hashTable[index].add(element);
+        return lists[index].add(element);
     }
 
     @Override
     public boolean remove(Object o) {
         int index = getIndex(o);
 
-        if (hashTable[index] != null && hashTable[index].remove(o)) {
+        if (lists[index] != null && lists[index].remove(o)) {
             modCount++;
             size--;
 
@@ -197,7 +197,7 @@ public class HashTable<E> implements Collection<E> {
         boolean isCollectionChanged = false;
         int newSize = 0;
 
-        for (ArrayList<E> list : hashTable) {
+        for (ArrayList<E> list : lists) {
             if (list != null && list.size() > 0) {
                 list.retainAll(c);
 
@@ -221,7 +221,7 @@ public class HashTable<E> implements Collection<E> {
             return;
         }
 
-        for (ArrayList<E> list : hashTable) {
+        for (ArrayList<E> list : lists) {
             if (list != null) {
                 list.clear();
             }
@@ -238,11 +238,10 @@ public class HashTable<E> implements Collection<E> {
         }
 
         StringBuilder sb = new StringBuilder();
-
         int i = 0;
 
-        for (ArrayList<E> list : hashTable) {
-            sb.append(i).append(" ").append(list).append(System.lineSeparator());
+        for (ArrayList<E> list : lists) {
+            sb.append(i).append('.').append(" ").append('[').append(list).append(']').append(System.lineSeparator());
 
             i++;
         }

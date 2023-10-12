@@ -36,7 +36,7 @@ public class Main {
         System.out.println();
 
         System.out.println("hashTable using the toArray() method: " + Arrays.toString(hashTable.toArray()));
-        System.out.println("hashTable using the toArray(T[] а) method: " + Arrays.toString(hashTable.toArray(new Integer[10])));
+        System.out.println("hashTable using the toArray(T[] a) method: " + Arrays.toString(hashTable.toArray(new Integer[10])));
 
         Integer removedNumber = 25;
         if (hashTable.remove(removedNumber)) {
