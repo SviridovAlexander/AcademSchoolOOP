@@ -33,8 +33,8 @@ public class HashTable<E> implements Collection<E> {
 
     private class HashTableIterator implements Iterator<E> {
         private int globalIndex = -1;
-        private int elementIndex;
         private int listIndex;
+        private int arrayIndex;
         private final int expectedModCount = modCount;
 
         @Override
@@ -52,18 +52,18 @@ public class HashTable<E> implements Collection<E> {
                 throw new NoSuchElementException("No elements left");
             }
 
-            while (listIndex < lists.length) {
-                if (lists[listIndex] == null || elementIndex >= lists[listIndex].size()) {
-                    listIndex++;
+            while (arrayIndex < lists.length) {
+                if (lists[arrayIndex] == null || listIndex >= lists[arrayIndex].size()) {
+                    arrayIndex++;
                 } else {
-                    E data = lists[listIndex].get(elementIndex);
+                    E data = lists[arrayIndex].get(listIndex);
 
                     globalIndex++;
-                    elementIndex++;
+                    listIndex++;
 
-                    if (elementIndex == lists[listIndex].size()) {
-                        listIndex++;
-                        elementIndex = 0;
+                    if (listIndex == lists[arrayIndex].size()) {
+                        arrayIndex++;
+                        listIndex = 0;
                     }
 
                     return data;
@@ -156,7 +156,7 @@ public class HashTable<E> implements Collection<E> {
     }
 
     @Override
-    public boolean containsAll(Collection<?> c)  {
+    public boolean containsAll(Collection<?> c) {
         for (Object e : c) {
             if (!contains(e)) {
                 return false;
@@ -198,7 +198,7 @@ public class HashTable<E> implements Collection<E> {
         int newSize = 0;
 
         for (ArrayList<E> list : lists) {
-            if (list != null && list.size() > 0) {
+            if (list != null && !list.isEmpty()) {
                 list.retainAll(c);
 
                 newSize += list.size();
@@ -238,13 +238,17 @@ public class HashTable<E> implements Collection<E> {
         }
 
         StringBuilder sb = new StringBuilder();
+        sb.append('{');
         int i = 0;
 
         for (ArrayList<E> list : lists) {
-            sb.append(i).append('.').append(" ").append('[').append(list).append(']').append(System.lineSeparator());
+            sb.append(i).append('.').append(" ").append(list).append(System.lineSeparator());
 
             i++;
         }
+
+        sb.setLength(sb.length() - 2);
+        sb.append('}');
 
         return sb.toString();
     }

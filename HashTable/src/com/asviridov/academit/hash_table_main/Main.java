@@ -15,7 +15,8 @@ public class Main {
         hashTable.add(null);
         hashTable.addAll(numbers1);
 
-        System.out.println("hashTable: " + hashTable);
+        System.out.println("hashTable:");
+        System.out.println(hashTable);
 
         System.out.println("hashTable size: " + hashTable.size());
 
