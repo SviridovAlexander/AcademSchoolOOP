@@ -22,15 +22,12 @@ public class TemperatureController {
         @Override
         public void actionPerformed(ActionEvent e) {
             // Get user input from the view
-            double inputTemperature = view.getInputTemperature();
-            String fromScale = view.getFromScale();
-            String toScale = view.getToScale();
-
             // Update the model
-            model.setTemperature(inputTemperature);
-            model.setFromScale(fromScale);
-            model.setToScale(toScale);
-            model.setConvertors();
+            model.updateModel(
+                    view.getFromScale(),
+                    view.getToScale(),
+                    view.getInputTemperature()
+            );
 
             // Update the view with the result
             view.setResultText(String.format("%.2f %s", model.getResult(), view.getToScale()));

@@ -1,24 +1,21 @@
 package com.asviridov.academit.temperature.scales;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TemperatureConverterFactoryImpl implements TemperatureConverterFactory {
-    private static final String CELSIUS = "Celsius";
-    private static final String FAHRENHEIT = "Fahrenheit";
-    private static final String KELVIN = "Kelvin";
-
-    @Override
-    public List<String> getSupportedScales() {
-        return List.of(CELSIUS, FAHRENHEIT, KELVIN);
-    }
+    Map<String, TemperatureConverter> converterMap = new HashMap<>();
 
     @Override
     public TemperatureConverter getTemperatureConverter(String scale) {
-        return switch (scale) {
-            case CELSIUS -> new CelsiusConverter();
-            case FAHRENHEIT -> new FahrenheitConverter();
-            case KELVIN -> new KelvinConverter();
-            default -> throw new IllegalArgumentException("Unsupported temperature scale: " + scale);
-        };
+        return converterMap.computeIfAbsent(
+                scale,
+                (s) -> switch (s) {
+                    case CELSIUS -> new CelsiusConverter();
+                    case FAHRENHEIT -> new FahrenheitConverter();
+                    case KELVIN -> new KelvinConverter();
+                    default -> throw new IllegalArgumentException("Unsupported temperature scale: " + scale);
+                }
+        );
     }
 }

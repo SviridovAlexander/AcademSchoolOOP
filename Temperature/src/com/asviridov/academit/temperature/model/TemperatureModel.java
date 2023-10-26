@@ -1,49 +1,29 @@
 package com.asviridov.academit.temperature.model;
 
-import com.asviridov.academit.temperature.scales.TemperatureConverter;
 import com.asviridov.academit.temperature.scales.TemperatureConverterFactory;
 
 public class TemperatureModel {
-    private double temperature;
-    private String fromScale;
-    private String toScale;
+    private double result;
 
-    private TemperatureConverterFactory factory;
-
-    private TemperatureConverter fromConverter;
-    private TemperatureConverter toConverter;
+    private final TemperatureConverterFactory factory;
 
     public TemperatureModel(TemperatureConverterFactory factory) {
-        this.fromConverter = factory.getTemperatureConverter("Celsius"); // Default to Celsius
-        this.toConverter = factory.getTemperatureConverter("Celsius"); // Default to Celsius
+        this.factory = factory;
     }
 
-    public double getTemperature() {
-        return temperature;
-    }
-
-    public void setTemperature(double temperature) {
-        this.temperature = temperature;
-    }
-
-    public void setFromScale(String fromScale) {
-        this.fromScale = fromScale;
-    }
-
-    public void setToScale(String toScale) {
-        this.toScale = toScale;
+    public void updateModel(String fromScale, String toScale, double temperature) {
+        if (fromScale.equals(toScale)) {
+            result = temperature;
+        } else if (fromScale.equals(TemperatureConverterFactory.CELSIUS)) {
+            result = factory.getTemperatureConverter(toScale).convertFromCelsiusScale(temperature);
+        } else {
+            result = factory.getTemperatureConverter(toScale).convertFromCelsiusScale(
+                    factory.getTemperatureConverter(fromScale).convertToCelsiusScale(temperature)
+            );
+        }
     }
 
     public double getResult() {
-        return toConverter.convertFromCelsiusScale(fromConverter.convertToCelsiusScale(temperature));
-    }
-
-    public void setConvertors() {
-        this.fromConverter = factory.getTemperatureConverter(fromScale);
-        this.toConverter = factory.getTemperatureConverter(toScale);
-    }
-
-    public void setConverterFactory(TemperatureConverterFactory factory) {
-        this.factory = factory;
+        return result;
     }
 }
