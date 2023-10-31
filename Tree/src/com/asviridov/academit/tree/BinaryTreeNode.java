@@ -1,27 +1,27 @@
 package com.asviridov.academit.tree;
 
-class TreeNode<E> {
-    private TreeNode<E> left;
-    private TreeNode<E> right;
+class BinaryTreeNode<E> {
+    private BinaryTreeNode<E> left;
+    private BinaryTreeNode<E> right;
     private E data;
 
-    public TreeNode(E data) {
+    public BinaryTreeNode(E data) {
         this.data = data;
     }
 
-    public TreeNode<E> getLeft() {
+    public BinaryTreeNode<E> getLeft() {
         return left;
     }
 
-    public void setLeft(TreeNode<E> left) {
+    public void setLeft(BinaryTreeNode<E> left) {
         this.left = left;
     }
 
-    public TreeNode<E> getRight() {
+    public BinaryTreeNode<E> getRight() {
         return right;
     }
 
-    public void setRight(TreeNode<E> right) {
+    public void setRight(BinaryTreeNode<E> right) {
         this.right = right;
     }
 

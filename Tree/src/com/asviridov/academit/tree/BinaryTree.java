@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class BinaryTree<E> {
-    private TreeNode<E> root;
+    private BinaryTreeNode<E> root;
     private int size;
     private final Comparator<E> comparator;
 
@@ -42,7 +42,7 @@ public class BinaryTree<E> {
     }
 
     public void add(E data) {
-        TreeNode<E> newNode = new TreeNode<>(data);
+        BinaryTreeNode<E> newNode = new BinaryTreeNode<>(data);
 
         if (size == 0) {
             root = newNode;
@@ -51,25 +51,25 @@ public class BinaryTree<E> {
             return;
         }
 
-        TreeNode<E> currentNode = root;
+        BinaryTreeNode<E> currentNode = root;
 
         while (true) {
-            int comparingResult = compare(currentNode.getData(), data);
+            int comparisonResult = compare(currentNode.getData(), data);
 
-            if (comparingResult > 0) {
+            if (comparisonResult > 0) {
                 if (currentNode.getLeft() == null) {
                     currentNode.setLeft(newNode);
                     break;
-                } else {
-                    currentNode = currentNode.getLeft();
                 }
+
+                currentNode = currentNode.getLeft();
             } else {
                 if (currentNode.getRight() == null) {
                     currentNode.setRight(newNode);
                     break;
-                } else {
-                    currentNode = currentNode.getRight();
                 }
+
+                currentNode = currentNode.getRight();
             }
         }
 
@@ -81,21 +81,18 @@ public class BinaryTree<E> {
             return false;
         }
 
-        TreeNode<E> node = root;
+        BinaryTreeNode<E> node = root;
 
         while (node != null) {
             int comparisonResult = compare(node.getData(), data);
 
             if (comparisonResult == 0) {
                 return true;
-            }
-
-            if (comparisonResult > 0) {
+            } else if (comparisonResult > 0) {
                 node = node.getLeft();
-                continue;
+            } else {
+                node = node.getRight();
             }
-
-            node = node.getRight();
         }
 
         return false;
@@ -106,20 +103,20 @@ public class BinaryTree<E> {
             return false;
         }
 
-        TreeNode<E> currentNode = root;
-        TreeNode<E> parentNode = null;
+        BinaryTreeNode<E> currentNode = root;
+        BinaryTreeNode<E> parentNode = null;
 
         while (currentNode != null) {
-            int compareResult = compare(currentNode.getData(), data);
+            int comparisonResult= compare(currentNode.getData(), data);
 
-            if (compareResult == 0) {
+            if (comparisonResult== 0) {
                 removeNode(parentNode, currentNode);
                 return true;
             }
 
             parentNode = currentNode;
 
-            if (compareResult > 0) {
+            if (comparisonResult> 0) {
                 currentNode = currentNode.getLeft();
             } else {
                 currentNode = currentNode.getRight();
@@ -129,7 +126,7 @@ public class BinaryTree<E> {
         return false;
     }
 
-    private void removeNode(TreeNode<E> parentNode, TreeNode<E> currentNode) {
+    private void removeNode(BinaryTreeNode<E> parentNode, BinaryTreeNode<E> currentNode) {
         if (currentNode.getLeft() == null && currentNode.getRight() == null) {
             if (parentNode == null) {
                 root = null;
@@ -138,9 +135,19 @@ public class BinaryTree<E> {
             } else {
                 parentNode.setRight(null);
             }
-        } else if (currentNode.getLeft() != null && currentNode.getRight() != null) {
-            TreeNode<E> rightSubtreeMinNode = currentNode.getRight();
-            TreeNode<E> rightSubtreeMinNodeParent = currentNode;
+        } else if (currentNode.getLeft() == null || currentNode.getRight() == null) {
+            BinaryTreeNode<E> child = (currentNode.getLeft() != null) ? currentNode.getLeft() : currentNode.getRight();
+
+            if (parentNode == null) {
+                root = child;
+            } else if (parentNode.getLeft() == currentNode) {
+                parentNode.setLeft(child);
+            } else {
+                parentNode.setRight(child);
+            }
+        } else {
+            BinaryTreeNode<E> rightSubtreeMinNode = currentNode.getRight();
+            BinaryTreeNode<E> rightSubtreeMinNodeParent = currentNode;
 
             while (rightSubtreeMinNode.getLeft() != null) {
                 rightSubtreeMinNodeParent = rightSubtreeMinNode;
@@ -161,16 +168,6 @@ public class BinaryTree<E> {
             } else {
                 parentNode.setRight(rightSubtreeMinNode);
             }
-        } else {
-            TreeNode<E> child = (currentNode.getLeft() != null) ? currentNode.getLeft() : currentNode.getRight();
-
-            if (parentNode == null) {
-                root = child;
-            } else if (parentNode.getLeft() == currentNode) {
-                parentNode.setLeft(child);
-            } else {
-                parentNode.setRight(child);
-            }
         }
 
         size--;
@@ -181,11 +178,11 @@ public class BinaryTree<E> {
             return;
         }
 
-        Queue<TreeNode<E>> queue = new LinkedList<>();
+        Queue<BinaryTreeNode<E>> queue = new LinkedList<>();
         queue.add(root);
 
         while (!queue.isEmpty()) {
-            TreeNode<E> currentNode = queue.remove();
+            BinaryTreeNode<E> currentNode = queue.remove();
             consumer.accept(currentNode.getData());
 
             if (currentNode.getLeft() != null) {
@@ -203,11 +200,11 @@ public class BinaryTree<E> {
             return;
         }
 
-        Deque<TreeNode<E>> stack = new LinkedList<>();
+        Deque<BinaryTreeNode<E>> stack = new LinkedList<>();
         stack.push(root);
 
         while (!stack.isEmpty()) {
-            TreeNode<E> currentNode = stack.poll();
+            BinaryTreeNode<E> currentNode = stack.poll();
             consumer.accept(currentNode.getData());
 
             if (currentNode.getRight() != null) {
@@ -220,7 +217,7 @@ public class BinaryTree<E> {
         }
     }
 
-    private static <E> void visitByDepthWithRecursion(TreeNode<E> node, Consumer<E> consumer) {
+    private static <E> void visitByDepthWithRecursion(BinaryTreeNode<E> node, Consumer<E> consumer) {
         if (node == null) {
             return;
         }

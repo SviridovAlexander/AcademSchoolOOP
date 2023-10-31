@@ -15,15 +15,15 @@ public class Main {
         binaryTree.add(7);
         binaryTree.add(13);
 
-        System.out.println("Nodes in breadth-first traversal order: ");
+        System.out.println("Nodes in breadth-first traversal order:");
         binaryTree.visitByWidth(result -> System.out.print(result + " "));
         System.out.println();
 
-        System.out.println("Nodes in depth-first traversal order: ");
+        System.out.println("Nodes in depth-first traversal order:");
         binaryTree.visitByDepth(result -> System.out.print(result + " "));
         System.out.println();
 
-        System.out.println("Nodes in order of depth-first traversal of the tree with recursion: ");
+        System.out.println("Nodes in order of depth-first traversal of the tree with recursion:");
         binaryTree.visitByDepthWithRecursion(result -> System.out.print(result + " "));
         System.out.println();
 
@@ -41,7 +41,7 @@ public class Main {
 
         int data2 = 8;
         if (binaryTree.remove(data2)) {
-            System.out.println("Tree after removing node with value " + data2 + ": ");
+            System.out.println("Tree after removing node with value " + data2 + ":");
             binaryTree.visitByWidth(result -> System.out.print(result + " "));
             System.out.println();
         } else {
