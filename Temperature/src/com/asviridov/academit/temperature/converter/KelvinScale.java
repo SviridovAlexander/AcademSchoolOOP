@@ -1,8 +1,8 @@
-package com.asviridov.academit.temperature.scales;
+package com.asviridov.academit.temperature.converter;
 
-public class KelvinConverter implements TemperatureConverter {
+public class KelvinScale implements Scale {
     @Override
-    public String getName() {
+    public String toString() {
         return "Kelvin";
     }
 

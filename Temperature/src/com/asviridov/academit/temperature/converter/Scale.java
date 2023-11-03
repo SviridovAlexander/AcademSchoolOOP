@@ -1,7 +1,7 @@
-package com.asviridov.academit.temperature.scales;
+package com.asviridov.academit.temperature.converter;
 
-public interface TemperatureConverter {
-    String getName();
+public interface Scale {
+    String toString();
 
     double convertToCelsiusScale(double temperature);
 

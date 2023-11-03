@@ -1,41 +1,65 @@
 package com.asviridov.academit.temperature.view;
 
+import com.asviridov.academit.temperature.converter.Converter;
+import com.asviridov.academit.temperature.converter.Scale;
+import com.asviridov.academit.temperature.converter.TemperatureConverter;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.Objects;
-import java.util.Vector;
 
 public class TemperatureView implements View {
-    private final JTextField inputField;
-    private final JComboBox<String> fromScaleComboBox;
-    private final JComboBox<String> toScaleComboBox;
-    private final JButton convertButton;
-    private final JLabel resultLabel;
-    private final JFrame frame;
-
-    public TemperatureView(java.util.List<String> supportedScales) {
-        frame = new JFrame("Temperature Converter");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 200);
-        frame.setLayout(new FlowLayout());
-
-        inputField = new JTextField(10);
-        fromScaleComboBox = new JComboBox<>(new Vector<>(supportedScales));
-        toScaleComboBox = new JComboBox<>(new Vector<>(supportedScales));
-        convertButton = new JButton("Convert");
-        resultLabel = new JLabel();
+    private JTextField inputField;
+    private JComboBox<Scale> fromScaleComboBox;
+    private JComboBox<Scale> toScaleComboBox;
+    private JLabel resultLabel;
+    private JFrame frame;
+    private final Converter converter;
+    private final JButton convertButton = new JButton("Convert");
+    public TemperatureView(TemperatureConverter converter) {
+        this.converter = converter;
     }
 
+    @Override
     public void start() {
         SwingUtilities.invokeLater(() -> {
-            frame.add(inputField);
-            frame.add(fromScaleComboBox);
-            frame.add(toScaleComboBox);
-            frame.add(convertButton);
-            frame.add(resultLabel);
+            frame = new JFrame("Temperature Converter");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setMinimumSize(new Dimension(600, 300));
+
+            inputField = new JTextField();
+            fromScaleComboBox = new JComboBox<>();
+            toScaleComboBox = new JComboBox<>();
+            resultLabel = new JLabel();
+
+            JPanel contentPane = new JPanel(new GridBagLayout());
+            GridBagConstraints c = new GridBagConstraints();
+            JPanel inputPanel = new JPanel();
+            inputPanel.setLayout(new FlowLayout());
+            inputField = new JTextField(10);
+            inputPanel.add(new JLabel("Enter Temperature:"));
+            inputPanel.add(inputField);
+            inputPanel.add(convertButton);
+
+            JPanel scalePanel = new JPanel();
+            scalePanel.setLayout(new FlowLayout());
+            fromScaleComboBox = new JComboBox<>(converter.getTemperatureScales());
+            toScaleComboBox = new JComboBox<>(converter.getTemperatureScales());
+            scalePanel.add(new JLabel("From Scale:"));
+            scalePanel.add(fromScaleComboBox);
+            scalePanel.add(new JLabel("To Scale:"));
+            scalePanel.add(toScaleComboBox);
+
+            JPanel resultPanel = new JPanel();
+            resultPanel.setLayout(new FlowLayout());
+            resultLabel = new JLabel();
+            resultPanel.add(resultLabel);
+
+            inputField.setToolTipText("Enter the temperature to convert");
+            fromScaleComboBox.setToolTipText("Select the source temperature scale");
+            toScaleComboBox.setToolTipText("Select the target temperature scale");
 
             // Input is empty, so the button is initially disabled
             convertButton.setEnabled(false);
@@ -57,11 +81,29 @@ public class TemperatureView implements View {
                     processInputTemperature(inputField.getText());
                 }
             });
+
+            c.gridx = 0;
+            c.gridy = 0;
+            c.anchor = GridBagConstraints.PAGE_START;
+            contentPane.add(inputPanel, c);
+
+            c.gridy = 1;
+            contentPane.add(scalePanel, c);
+
+            c.gridy = 2;
+            c.anchor = GridBagConstraints.CENTER;
+            contentPane.add(resultPanel, c);
+
+            frame.setContentPane(contentPane);
+
+            frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         });
     }
 
-    protected void processInputTemperature(String input) {
+
+    @Override
+    public void processInputTemperature(String input) {
         resultLabel.setText(null);
 
         try {
@@ -72,22 +114,27 @@ public class TemperatureView implements View {
         }
     }
 
+    @Override
     public double getInputTemperature() {
         return Double.parseDouble(inputField.getText());
     }
 
-    public String getFromScale() {
-        return Objects.requireNonNull(fromScaleComboBox.getSelectedItem()).toString();
+    @Override
+    public Scale getFromScale() {
+        return fromScaleComboBox.getItemAt(toScaleComboBox.getSelectedIndex());
     }
 
-    public String getToScale() {
-        return Objects.requireNonNull(toScaleComboBox.getSelectedItem()).toString();
+    @Override
+    public Scale getToScale() {
+        return toScaleComboBox.getItemAt(fromScaleComboBox.getSelectedIndex());
     }
 
+    @Override
     public void setResultText(String resultText) {
         resultLabel.setText("Result: " + resultText);
     }
 
+    @Override
     public void addConvertButtonListener(ActionListener listener) {
         convertButton.addActionListener(listener);
     }
