@@ -17,7 +17,9 @@ public class TemperatureView implements View {
     private JLabel resultLabel;
     private JFrame frame;
     private final Converter converter;
-    private final JButton convertButton = new JButton("Convert");
+    private JButton convertButton;
+    private ActionListener convertButtonListener;
+
     public TemperatureView(TemperatureConverter converter) {
         this.converter = converter;
     }
@@ -33,7 +35,7 @@ public class TemperatureView implements View {
             fromScaleComboBox = new JComboBox<>();
             toScaleComboBox = new JComboBox<>();
             resultLabel = new JLabel();
-
+            convertButton = new JButton("Convert");
             JPanel contentPane = new JPanel(new GridBagLayout());
             GridBagConstraints c = new GridBagConstraints();
             JPanel inputPanel = new JPanel();
@@ -63,6 +65,11 @@ public class TemperatureView implements View {
 
             // Input is empty, so the button is initially disabled
             convertButton.setEnabled(false);
+
+            // add listener that could have been set earlier
+            if (convertButtonListener != null) {
+                convertButton.addActionListener(convertButtonListener);
+            }
 
             // Add a handler watching the input field to enable/disable the button
             inputField.getDocument().addDocumentListener(new DocumentListener() {
@@ -135,7 +142,11 @@ public class TemperatureView implements View {
     }
 
     @Override
-    public void addConvertButtonListener(ActionListener listener) {
-        convertButton.addActionListener(listener);
+    public void setConvertButtonListener(ActionListener listener) {
+        convertButtonListener = listener;
+
+        if (convertButton != null && listener != null) {
+            convertButton.addActionListener(listener);
+        }
     }
 }

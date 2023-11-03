@@ -16,7 +16,7 @@ public class TemperatureController implements Controller {
     @Override
     public void setView(View view) {
         this.view = view;
-        view.addConvertButtonListener(new ConvertButtonListener());
+        view.setConvertButtonListener(new ConvertButtonListener());
     }
 
     @Override

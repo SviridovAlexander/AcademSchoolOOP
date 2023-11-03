@@ -17,5 +17,5 @@ public interface View {
 
     void setResultText(String resultText);
 
-    void addConvertButtonListener(ActionListener listener);
+    void setConvertButtonListener(ActionListener listener);
 }
